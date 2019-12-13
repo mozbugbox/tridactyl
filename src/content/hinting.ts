@@ -42,6 +42,10 @@ import Logger from "@src/lib/logging"
 const logger = new Logger("hinting")
 import * as keyseq from "@src/lib/keyseq"
 
+import { IMMatcher } from "@src/lib/immatcher"
+import { im_dict } from "@src/lib/immatcher_table"
+const immatcher = new IMMatcher(im_dict.im_table)
+
 /** Calclate the distance between two segments.
  * @hidden
  * */
@@ -652,7 +656,7 @@ function filterHintsVimperator(fstr, reflow = false) {
             active = active.filter(hint => hint.name.startsWith(run.str))
         } else {
             // By text
-            active = active.filter(hint => hint.filterData.includes(run.str))
+            active = active.filter(hint => immatcher.contain(hint.filterData, run.str))
 
             if (reflow) rename(active)
         }
