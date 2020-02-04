@@ -29,7 +29,7 @@ build_no_sign_beta(){
     yarn run clean
     yarn run build --no-native
     scripts/version.js beta
-    sed 's/"name": "Tridactyl"/"name": "Tridactyl: Beta"/' -i build/manifest.json
+    sed 's/"name": "Tridactyl"/"name": "Tridactyl: Beta ChineseIMM"/' -i build/manifest.json
     mkdir -p web-ext-artifacts
     $(yarn bin)/web-ext build --source-dir ./build --overwrite-dest
     for f in web-ext-artifacts/*.zip; do
