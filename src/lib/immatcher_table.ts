@@ -6,4 +6,4 @@ const im_dict = {
   }
 };
 
-export {im_dict};
+export { im_dict };

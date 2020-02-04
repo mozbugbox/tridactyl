@@ -160,6 +160,7 @@ import * as rc from "@src/background/config_rc"
 import * as css_util from "@src/lib/css_util"
 import * as Updates from "@src/lib/updates"
 import * as Extensions from "@src/lib/extension_info"
+import { im_dict } from "@src/lib/immatcher_table"
 
 ALL_EXCMDS = {
     "": BGSELF,
@@ -4067,6 +4068,39 @@ export async function hint(option?: string, selectors?: string, ...rest: string[
 //        await run_exstr(...commands)
 //    }
 //}
+
+/**
+ * Hold immatcher table for hinting with Chinese input methods
+ * @hidden
+ */
+//#background_helper
+let IMDict = null
+
+/**
+ * Load immatcher table for hinting with Chinese input methods
+ */
+//#background
+export async function get_im_dict() {
+    if (IMDict === null) {
+        let config_path = await Native.getenv("XDG_DATA_HOME")
+        let path = config_path + "/im-matcher/immatcher_table.json"
+        try {
+            logger.info("im-matcher: " + path)
+            let im_dict_str = (await Native.read(path)).content
+            let im_dict = JSON.parse(im_dict_str)
+            IMDict = im_dict
+            IMDict["path"] = path
+        } catch (e) {
+            logger.error("get_im_table: " + e)
+            IMDict = im_dict
+            IMDict["path"] = "@src/lib/immatcher_table"
+            IMDict["error"] = e
+            IMDict["sys_path"] = path
+        }
+    }
+    return IMDict
+}
+
 
 /**
  * Perform rot13.
