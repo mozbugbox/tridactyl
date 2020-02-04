@@ -569,7 +569,8 @@ function buildHintsVimperator(els: Element[], onSelect: HintSelectedCallback) {
     for (const [el, name] of izip(els, names)) {
         let ft = elementFilterableText(el)
         // strip out hintchars
-        ft = ft.replace(filterableTextFilter, "")
+        // We could make use of hintchars (123456789) inside the element text
+        // ft = ft.replace(filterableTextFilter, "")
         logger.debug({ el, name, ft })
         modeState.hintchars += name + ft
         modeState.hints.push(new Hint(el, name, ft, onSelect))
